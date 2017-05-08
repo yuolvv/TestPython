@@ -28,14 +28,14 @@ class Shut():
     def shutdown(self):
         seconds = self.calctime()
         self.l_msg['text'] = '计算机将在'+str(seconds)+'秒后关机'
-        #time.sleep(self.seconds)
-        #os.system("shutdown -s -t 0")
+        time.sleep(seconds)
+        os.system("shutdown -s -t 0")
 
     def reboot(self):
         seconds = self.calctime()
         self.l_msg['text'] = '计算机将在'+str(seconds)+'秒后重启'
-        #time.sleep(self.seconds)
-        #os.system("shutdown -r -t 0")
+        time.sleep(seconds)
+        os.system("shutdown -r -t 0")
 
 def view():
     root = Tk()
