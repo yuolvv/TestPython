@@ -6,12 +6,32 @@ import urllib.request
 from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import ttk
+from tool import proxy
+
+def getProxy():
+    url = 'http://www.xicidaili.com/nn/'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36'
+    }
+    ip_list = proxy.get_ip_list(url, headers=headers)
+    proxies = proxy.get_random_ip(ip_list)
+    return proxies
 
 class getUrl():
     # 网址
     url = "https://api.shuax.com/tools/getchrome"
 
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3088.3 Safari/537.36'}
+
+    #获取代理IP
+    proxies = getProxy()
+    print(proxies)
+
+    proxy_handler = urllib.request.ProxyHandler(proxies)
+    opener = urllib.request.build_opener(proxy_handler)
+    urllib.request.install_opener(opener)
+
+
 
     # 请求
     request = urllib.request.Request(url=url, headers=headers)
