@@ -21,7 +21,7 @@ class getUrl():
     # 网址
     url = "https://api.shuax.com/tools/getchrome"
 
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3088.3 Safari/537.36'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36'}
 
 
     #获取代理IP
@@ -61,12 +61,13 @@ class getUrl():
     # print(soup.find_all('a'))
     # print(soup.find_all('a')[10]['href'])
 
-    def __init__(self,releaseversion,bitnum,v_ver,v_size,v_time):
+    def __init__(self,releaseversion,bitnum,v_ver,v_size,v_time,text_url):
         self.releaseversion = releaseversion
         self.bitnum = bitnum
         self.v_ver = v_ver
         self.v_size = v_size
         self.v_time = v_time
+        self.texturl = text_url
 
     def getinfo(self):
 
@@ -104,7 +105,7 @@ class getUrl():
         #print(len(downlink))
         for i in range(0,len(downlink)):
             print(downlink[i]['href'])
-
+            self.texturl.insert(END,downlink[i]['href']+"\n")
 
 
 
@@ -112,8 +113,8 @@ def view():
     root = Tk()
     #root.withdraw()
     root.title('Chrome浏览器下载链接提取工具')
-    width = 450
-    height = 300
+    width = 650
+    height = 280
     screenwidth = root.winfo_screenwidth()
     screenheight = root.winfo_screenheight()
     size = "%dx%d+%d+%d" % (width, height, (screenwidth - width) / 2, (screenheight - height) / 2)
@@ -156,10 +157,10 @@ def view():
     l_url = Label(root, text="下载地址：")
     l_url.grid(row=5,sticky=W)
 
-    text_url = Text(root)
-    text_url.grid(row=6,sticky=W)
+    text_url = Text(root,width=90,height=6)
+    text_url.grid(row=6, rowspan=5, columnspan=5, sticky=W, padx=10, pady=10)
 
-    geturl = getUrl(1, 1,v_ver,v_size,v_time)
+    geturl = getUrl(4, 1,v_ver,v_size,v_time,text_url)
 
     b_query = Button(root, text="立刻查询", command=geturl.getinfo)
     b_query.grid(row=1, column=3, sticky=W, padx=30)
@@ -167,7 +168,7 @@ def view():
 
 
     l_msg = Label(root, text='')
-    l_msg.grid(row=6)
+    #l_msg.grid(row=6)
 
 
     root.mainloop()
