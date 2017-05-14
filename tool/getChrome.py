@@ -23,6 +23,7 @@ class getUrl():
 
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3088.3 Safari/537.36'}
 
+
     #获取代理IP
     proxies = getProxy()
     print(proxies)
@@ -37,7 +38,7 @@ class getUrl():
     request = urllib.request.Request(url=url, headers=headers)
 
     # 爬取结果
-    response = urllib.request.urlopen(request)
+    response = urllib.request.urlopen(request, timeout=5)
 
     data = response.read()
 
