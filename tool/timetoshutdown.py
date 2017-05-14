@@ -2,6 +2,7 @@ import time
 import os
 from tkinter import *
 import datetime
+import threading
 
 class Shut():
     def __init__(self,l_msg,e_hour,e_minute,e_second):
@@ -37,6 +38,18 @@ class Shut():
         time.sleep(seconds)
         os.system("shutdown -r -t 0")
 
+class MyThread(threading.Thread):
+    def __init__(self,func):
+        super().__init__()
+
+        self.func = func
+
+        self.setDaemon(True)
+        self.start()
+
+    def run(self):
+        self.func()
+
 def view():
     root = Tk()
 
@@ -63,10 +76,12 @@ def view():
 
     st = Shut(l_msg,e_hour,e_minute,e_second)
 
-    b1_start = Button(root,text="关机",command=st.shutdown)
+    #b1_start = Button(root,text="关机",command=st.shutdown)
+    b1_start = Button(root, text="关机", command=lambda :MyThread(st.shutdown))
     b1_start.grid(row=4,column=0,sticky=E,pady=10)
 
-    b2_start = Button(root, text="重启", command=st.reboot)
+    #b2_start = Button(root, text="重启", command=st.reboot)
+    b2_start = Button(root, text="重启", command=lambda :MyThread(st.reboot))
     b2_start.grid(row=4, column=1, sticky=W,padx=20,pady=10)
 
     root.mainloop()
