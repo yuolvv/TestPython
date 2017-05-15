@@ -71,9 +71,6 @@ class getUrl():
 
     def getinfo(self):
 
-        print(self.releaseversion)
-        print(self.bitnum)
-
         #'稳定版','测试版','开发版','金丝雀版'
         if self.releaseversion == '稳定版':
             classname = "bs-callout bs-callout-success"
@@ -96,7 +93,7 @@ class getUrl():
 
         content = self.soup.find_all("div", {"class", classname})[verbit]
         #print(content)
-        print(content.h4.text+"：")
+        #print(content.h4.text+"：")
         #print(content.p.text)
         #print(content.find_all('p')[2].text)
 
@@ -104,13 +101,13 @@ class getUrl():
         #verinfo = content.p.text
         verinfo = content.find_all('p')[0].text
         ver = verinfo.split('，')[0].replace('最新版本：','')
-        print('最新版本：' + ver)
+        #print('最新版本：' + ver)
         self.v_ver['text'] = ver
         size = verinfo.split('，')[1].replace('文件大小：','')
-        print('文件大小：' + size)
+        #print('文件大小：' + size)
         self.v_size['text'] = size
         time = verinfo.split('，')[2].replace('查询时间：','')
-        print('查询时间：' + time)
+        #print('查询时间：' + time)
         self.v_time['text'] = time
 
         #获取下载地址
@@ -122,7 +119,7 @@ class getUrl():
         self.texturl.delete(1.0,END)
 
         for i in range(0,len(downlink)):
-            print(downlink[i]['href'])
+            #print(downlink[i]['href'])
             self.texturl.insert(END,downlink[i]['href']+"\n")
 
 
@@ -179,11 +176,10 @@ def view():
     text_url = Text(root,width=90,height=6)
     text_url.grid(row=6, rowspan=5, columnspan=5, sticky=W, padx=10, pady=10)
 
-    print(verChosen.get())
+    def query():
+        getUrl(verChosen.get(), bitChosen.get(), v_ver, v_size, v_time, text_url).getinfo()
 
-    geturl = getUrl(verChosen.get(), bitChosen.get(), v_ver, v_size, v_time, text_url)
-
-    b_query = Button(root, text="立刻查询", command=geturl.getinfo)
+    b_query = Button(root, text="立刻查询", command=query)
     b_query.grid(row=1, column=3, sticky=W, padx=30)
 
 
