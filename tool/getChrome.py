@@ -25,12 +25,12 @@ class getUrl():
 
 
     #获取代理IP
-    proxies = getProxy()
-    print(proxies)
+    #proxies = getProxy()
+    #print(proxies)
 
-    proxy_handler = urllib.request.ProxyHandler(proxies)
-    opener = urllib.request.build_opener(proxy_handler)
-    urllib.request.install_opener(opener)
+    #proxy_handler = urllib.request.ProxyHandler(proxies)
+    #opener = urllib.request.build_opener(proxy_handler)
+    #urllib.request.install_opener(opener)
 
 
 
@@ -61,9 +61,9 @@ class getUrl():
     # print(soup.find_all('a'))
     # print(soup.find_all('a')[10]['href'])
 
-    def __init__(self,releaseversion,bitnum,v_ver,v_size,v_time,text_url):
-        self.releaseversion = releaseversion
-        self.bitnum = bitnum
+    def __init__(self,verChosen, bitChosen, v_ver,v_size,v_time,text_url):
+        self.releaseversion = verChosen
+        self.bitnum = bitChosen
         self.v_ver = v_ver
         self.v_size = v_size
         self.v_time = v_time
@@ -71,16 +71,30 @@ class getUrl():
 
     def getinfo(self):
 
-        if self.releaseversion == 1:
-            classname = "bs-callout bs-callout-success"
-        elif self.releaseversion == 2:
-            classname = "bs-callout bs-callout-info"
-        elif self.releaseversion == 3:
-            classname = "bs-callout bs-callout-warning"
-        elif self.releaseversion == 4:
-            classname = "bs-callout bs-callout-danger"
+        print(self.releaseversion)
+        print(self.bitnum)
 
-        content = self.soup.find_all("div", {"class", classname})[self.bitnum]
+        #'稳定版','测试版','开发版','金丝雀版'
+        if self.releaseversion == '稳定版':
+            classname = "bs-callout bs-callout-success"
+        elif self.releaseversion == '测试版':
+            classname = "bs-callout bs-callout-info"
+        elif self.releaseversion == '开发版':
+            classname = "bs-callout bs-callout-warning"
+        elif self.releaseversion == '金丝雀版':
+            classname = "bs-callout bs-callout-danger"
+        else:
+            classname = "bs-callout bs-callout-success"
+
+        #'32位','64位'
+        if self.bitnum == '32位':
+            verbit = 0
+        elif self.bitnum == '64位':
+            verbit = 1
+        else:
+            verbit = 0
+
+        content = self.soup.find_all("div", {"class", classname})[verbit]
         #print(content)
         print(content.h4.text+"：")
         #print(content.p.text)
@@ -103,10 +117,13 @@ class getUrl():
         downlink = content.find('blockquote').find_all('a')
         #print(downlink)
         #print(len(downlink))
+
+        #清除文本框
+        self.texturl.delete(1.0,END)
+
         for i in range(0,len(downlink)):
             print(downlink[i]['href'])
             self.texturl.insert(END,downlink[i]['href']+"\n")
-
 
 
 def view():
@@ -128,16 +145,18 @@ def view():
     l_release.grid(row=1,sticky=W,)
 
     rversion = StringVar()
-    verChosen = ttk.Combobox(root,textvariable=rversion,width=10)
+    verChosen = ttk.Combobox(root,textvariable=rversion,width=10,state='readonly')
     verChosen['values'] = ('稳定版','测试版','开发版','金丝雀版')
     verChosen.grid(row=1,column=1,sticky=W)
     verChosen.current(0)
+    #verChosen.bind("<<ComboboxSelected>>")
 
     rbit = StringVar()
-    bitChosen = ttk.Combobox(root, textvariable=rbit, width=10)
+    bitChosen = ttk.Combobox(root, textvariable=rbit, width=10,state='readonly')
     bitChosen['values'] = ('32位','64位')
     bitChosen.grid(row=1, column=2, sticky=W)
     bitChosen.current(0)
+    #bitChosen.bind("<<ComboboxSelected>>")
 
     l_ver = Label(root, text='最新版本：')
     l_ver.grid(row=2, sticky=W)
@@ -160,7 +179,9 @@ def view():
     text_url = Text(root,width=90,height=6)
     text_url.grid(row=6, rowspan=5, columnspan=5, sticky=W, padx=10, pady=10)
 
-    geturl = getUrl(4, 1,v_ver,v_size,v_time,text_url)
+    print(verChosen.get())
+
+    geturl = getUrl(verChosen.get(), bitChosen.get(), v_ver, v_size, v_time, text_url)
 
     b_query = Button(root, text="立刻查询", command=geturl.getinfo)
     b_query.grid(row=1, column=3, sticky=W, padx=30)
