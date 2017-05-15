@@ -6,6 +6,8 @@ import urllib.request
 from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import ttk
+
+'''
 from tool import proxy
 
 def getProxy():
@@ -16,7 +18,7 @@ def getProxy():
     ip_list = proxy.get_ip_list(url, headers=headers)
     proxies = proxy.get_random_ip(ip_list)
     return proxies
-
+'''
 class getUrl():
     # 网址
     url = "https://api.shuax.com/tools/getchrome"
@@ -146,14 +148,12 @@ def view():
     verChosen['values'] = ('稳定版','测试版','开发版','金丝雀版')
     verChosen.grid(row=1,column=1,sticky=W)
     verChosen.current(0)
-    #verChosen.bind("<<ComboboxSelected>>")
 
     rbit = StringVar()
     bitChosen = ttk.Combobox(root, textvariable=rbit, width=10,state='readonly')
     bitChosen['values'] = ('32位','64位')
     bitChosen.grid(row=1, column=2, sticky=W)
     bitChosen.current(0)
-    #bitChosen.bind("<<ComboboxSelected>>")
 
     l_ver = Label(root, text='最新版本：')
     l_ver.grid(row=2, sticky=W)
