@@ -141,7 +141,7 @@ def view():
     l_note.grid(row=0,sticky=W)
 
     l_release = Label(root,text='查询版本：')
-    l_release.grid(row=1,sticky=W,)
+    l_release.grid(row=1,sticky=W)
 
     rversion = StringVar()
     verChosen = ttk.Combobox(root,textvariable=rversion,width=10,state='readonly')
